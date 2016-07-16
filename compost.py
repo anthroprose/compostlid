@@ -7,21 +7,25 @@ from pprint import pprint
 
 if __name__ == "__main__":
 
-    x = mraa.Aio(0)
+    try:
 
-    compostmsg = 'Compost Bucket at Location #1 is Ready for Pickup'
+        x = mraa.Aio(0)
 
-    conn = boto.sns.connect_to_region('us-west-2')
+        compostmsg = 'Compost Bucket at Location #1 is Ready for Pickup'
 
-    while 1:
+        conn = boto.sns.connect_to_region('us-west-2')
 
-        tmp = float(x.read())
+        while 1:
 
-        if tmp <= 200:
-            try:
-                pprint(compostmsg)
-                pub = conn.publish(topic=os.environ['TOPIC'], message=compostmsg)
-                time.sleep(30)
-            except:
-                print("Unexpected error:", sys.exc_info()[0])
+            tmp = float(x.read())
 
+            if tmp <= 200:
+                try:
+                    pprint(compostmsg)
+                    pub = conn.publish(topic=os.environ['TOPIC'], message=compostmsg)
+                    time.sleep(30)
+                except:
+                    print("Unexpected error:", sys.exc_info()[0])
+
+    except:
+        pass
